@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 ## For continous variables
 
 # Target as continous variable
-target_contin = origin_data['target'].apply(lambda x: 1 if x == 'Graduate' else 0)
+target_contin = origin_data['target'].apply(lambda x: 1 if x == 'Graduate' else -1)
 target_contin_df = pd.DataFrame({'target_contin' : target_contin})
 
 # Continous predictors
@@ -39,7 +39,7 @@ target_column = 'target_contin'
 correlations = contin_data.corr()
 
 # Sort correlations by absolute values with respect to the target column
-contin_correlation_with_target = correlations[target_column].abs().sort_values(ascending=False)
+contin_correlation_with_target = correlations[target_column].sort_values(ascending=False)
 
 print('Correlation results for continous data')
 print(contin_correlation_with_target)
