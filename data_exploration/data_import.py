@@ -71,7 +71,7 @@ gender_dic = {1 : 'male', 0 : 'female'}
 scholarship_dic = {1 : 'yes', 0 : 'no'}
 international = {1 : 'yes', 0 : 'no'}
 
-# Continous variables
+## Continous variables
 # application_order_dic = Application order (between 0 - first choice; and 9 last choice)
 # prev_qual_grade_dic = Grade of previous qualification (between 0 and 200)
 # admission_grade = Admission grade (between 0 and 200)
