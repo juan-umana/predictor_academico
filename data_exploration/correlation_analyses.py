@@ -79,7 +79,8 @@ categ_data = origin_data.drop(['application_order','previous_qualification_(grad
 
 categ_data = categ_data.map(str)
 
-cramers_v(categ_data,categ_data)
+# TO DO
+# cramers_v(categ_data,categ_data)
 
 
 
