@@ -73,17 +73,63 @@ De acuerdo con las correlaciones en las variables contínuas se decidió tomar l
 - units_i_semester_wo_evaluation (negative correlation)
 - inflation_rate (negative correlation)
 
-#### Descripción de predictores
+A continuación gráficos y análisis descriptivos de los predictores seleccionados:
 
-A continuación mostramos estadisticas y gráficos descriptivos de los predictores seleccionados:
+#### Unidades curriculares aprovadas en el primer y segundo semestre
 
-##### Unidades curriculares aprovadas en el primer y segundo semestre
-##### Calificaciones de las unidades aprovadas en el primer y segundo semestre
-##### Cursos
-##### Matrícula
-##### Beca
-##### Tipo de aplicación
-##### Edad al momento de inscripción
-##### Unidades sin evaluación en el primer y segundo semestre
-##### Tasa de inflación
+![](data_viz/units_approved_1_plot.png)
+![](data_viz/units_approved_2_plot.png)
 
+En ambos semestres las distribuciones son similares a través de ambos grupos, y
+se observa que existe una diferencia significativa entre el (mayor) número de
+unidades aprovadas por aquellos estudiantes que lograron éxito académico.
+
+#### Calificaciones de las unidades aprovadas en el primer y segundo semestre
+
+![](data_viz/units_grade_1_plot.png)
+![](data_viz/units_grade_2_plot.png)
+
+En ambos semestres las distribuciones son similares a través de ambos grupos, y
+se observa que existe una diferencia significativa entre las calificaciones de
+estudiantes que lograron éxito académico.
+
+#### Cursos
+
+
+
+#### Matrícula
+
+![](data_viz/tuition_plot.png)
+
+Al agrupar los datos por rendimiento académico se observa que la mayoría de estudiantes que no se encuentran al día con su matrícula fueron estudiantes que no se graduaron
+
+#### Beca
+
+![](data_viz/scholarship_plot.png)
+
+Al agrupar los datos por rendimiento académico se observa que la mayoría de estudiantes que poseen una beca lograron éxito académico 
+
+#### Tipo de aplicación
+
+
+
+#### Edad al momento de inscripción
+
+![](data_viz/age_plot.png)
+
+Existe una diferencia significativa entre las edades de los estudiantes con distinto desenlace académico, siendo el grupo de estudiantes que logró éxito académico aquel con menor edad
+
+#### Unidades sin evaluación en el primer y segundo semestre
+
+![](data_viz/units_woeval_1_plot.png)
+![](data_viz/units_woeval_2_plot.png)
+
+En ambos semestres las distribuciones son similares a través de ambos grupos, y
+se observa que existe una diferencia significativa entre el número de
+unidades aprovadas por aquellos estudiantes que lograron éxito académico.
+
+#### Tasa de inflación
+
+![](data_viz/inflation_plot.png)
+
+La tasa de inflación en ambos grupos presentan distribuciones sin diferencias significativas
