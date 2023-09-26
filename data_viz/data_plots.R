@@ -17,14 +17,16 @@ origin_data <- origin_data %>% mutate(targe_categ = ifelse(target == "Graduate",
 
 #### Unidades curriculares aprovadas en primer y segundo semestre ####
 
-units_approved_1_plot <- ggplot(origin_data, aes(x = targe_categ, y = `curricular_units_1st sem (approved)`)) + 
+units_approved_1_plot <- ggplot(origin_data, aes(x = origin_data$targe_categ,
+                                                 y = origin_data$`curricular_units 1st sem (approved)`)) + 
   geom_violin(aes(color=targe_categ), trim = TRUE) +
   labs(title = "Curricular units approved in 1st semester", y = "Number of units", x = "") + 
   theme_classic() +
   geom_signif(comparisons = list(c("Success", "Fail")),   
               map_signif_level=TRUE)
 
-units_approved_2_plot <- ggplot(origin_data, aes(x = targe_categ, y = `curricular_units_2nd sem (approved)`)) + 
+units_approved_2_plot <- ggplot(origin_data, aes(x = origin_data$targe_categ,
+                                                 y = origin_data$`curricular_units 2nd sem (approved)`)) + 
   geom_violin(aes(color=targe_categ), trim = TRUE) +
   labs(title = "Curricular units approved in 2nd semester", y = "Number of units", x = "") + 
   theme_classic() +
@@ -33,14 +35,16 @@ units_approved_2_plot <- ggplot(origin_data, aes(x = targe_categ, y = `curricula
 
 #### Calificación de las unidades curriculares en primer y segundo semestre ####
 
-units_grade_1_plot <- ggplot(origin_data, aes(x = targe_categ, y = `curricular_units_1st sem (grade)`)) + 
+units_grade_1_plot <- ggplot(origin_data, aes(x = origin_data$targe_categ,
+                                              y = origin_data$`curricular_units 1st sem (grade)`)) + 
   geom_violin(aes(color=targe_categ), trim = TRUE) +
   labs(title = "Grade units in 1st semester", y = "Grade", x = "") + 
   theme_classic() +
   geom_signif(comparisons = list(c("Success", "Fail")),   
               map_signif_level=TRUE)
 
-units_grade_2_plot <- ggplot(origin_data, aes(x = targe_categ, y = `curricular_units_2nd sem (grade)`)) + 
+units_grade_2_plot <- ggplot(origin_data, aes(x = origin_data$targe_categ,
+                                              y = origin_data$`curricular_units 2nd sem (grade)`)) + 
   geom_violin(aes(color=targe_categ), trim = TRUE) +
   labs(title = "Grade units in 2nd semester", y = "Grade", x = "") + 
   theme_classic() +
