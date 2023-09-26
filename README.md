@@ -5,7 +5,7 @@ Producto de analítica de datos para universidades que quieran estudiar los fact
 
 ### Pregunta de negocio
 
-¿Cuáles variables pueden considerarse factores de riesgo para que un estudiante no tenga éxito académico en la universidad y cómo predecir la necesidad de un estudiante de atender a programas de apoyo y consejería?
+¿Cuáles variables pueden considerarse factores de riesgo para que un estudiante no tenga éxito académico en la universidad y cómo predecir la necesidad de acompañamiento de un estudiante a partir ellos?
 
 #### Autores
 [Daniela Ruiz](https://github.com/danielaruizl1)  
