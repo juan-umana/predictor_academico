@@ -1,7 +1,7 @@
 # Predictor académico
 ## Código fuente del predictor de éxito académico en estudiantes universitarios
 
-Producto de analítica de datos para universidades que quieran incorporar un apoyo en el proceso de acompañamiento a los estudiantes y la toma de decisiones asociada como apoyos o consejería  
+Producto de analítica de datos para universidades que quieran estudiar los factores por los cuales los estudiantes no culminan sus estudios en el tiempo predestinado. Esto, con el fin de tomar decisiones informadas respecto al acompañamiento brindado a los estudiantes y las políticas educativas que se implementan.  
 
 ### Pregunta de negocio
 
