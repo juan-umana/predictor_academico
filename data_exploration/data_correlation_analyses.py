@@ -27,7 +27,7 @@ origin_data.columns = origin_data.columns.str.replace("'","")
 categ_variables =['marital_status', 'application_mode', 'application_order', 'course', 'daytime/evening_attendance',
                   'previous_qualification', 'nacionality', 'mothers_qualification', 'fathers_qualification',
                   'mothers_occupation', 'fathers_occupation', 'displaced', 'educational_special_needs', 'debtor',
-                  'tuition_fees_up_to_date', 'gender', 'scholarship_holder', 'age_at_enrollment', 'international']
+                  'tuition_fees_up_to_date', 'gender', 'scholarship_holder', 'international']
 marital_status_dic = {1 : 'single', 2 : 'married', 3 : 'widower',
                        4 : 'divorced', 5 : 'facto union', 6 : 'legally separated'}
 application_mode_dic = {1 : '1st phase : general contingent', 2 : 'Ordinance No. 612/93', 5 : '1st phase : special contingent (Azores Island)',
