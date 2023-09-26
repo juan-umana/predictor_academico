@@ -1,11 +1,11 @@
-import ucimlrepo
+#%%
 from ucimlrepo import fetch_ucirepo 
-
 import numpy as np
 import pandas as pd
 import scipy.stats as ss
 import seaborn as sns
 import matplotlib.pyplot as plt
+import seaborn as sns; sns.set_theme()
 
 # fetch dataset 
 predict_students_dropout_and_academic_success = fetch_ucirepo(id=697) 
@@ -92,6 +92,8 @@ contin_variables = ['application_order','previous_qualification_(grade)',
                          'curricular_units_2nd_sem_(grade)',
                          'curricular_units_2nd_sem_(without_evaluations)',
                          'unemployment_rate', 'inflation_rate', 'gdp']
+
+#%%
 # application_order_dic = Application order (between 0 - first choice; and 9 last choice)
 # prev_qual_grade_dic = Grade of previous qualification (between 0 and 200)
 # admission_grade = Admission grade (between 0 and 200)
@@ -119,12 +121,18 @@ target_column = 'target_contin'
 
 # Calculate the correlations
 correlations = contin_data.corr()
+plt.figure(figsize=(12, 10))
+sns.heatmap(correlations, annot=True, cmap="coolwarm")
+plt.show()
 
+#%%
 # Sort correlations by absolute values with respect to the target column
 contin_correlation = correlations[target_column].sort_values(ascending=False)
 
 print('Correlation results for continous data')
 print(contin_correlation)
+
+#%%
 
 ## For categorical variables: Selection of variables by Chi-square tests
 
@@ -138,30 +146,19 @@ categ_data = origin_data[categ_variables]
 # Continous data
 categ_data = categ_data.join(target_categ_df)
 
-def cramers_v(confusion_matrix):
-#     """ calculate Cramers V statistic for categorial-categorial association.
-#         uses correction from Bergsma and Wicher,
-#         Journal of the Korean Statistical Society 42 (2013): 323-328
-#     """
-    chi2 = ss.chi2_contingency(confusion_matrix)[0]
-    total = confusion_matrix.sum()
-    phi2 = chi2 / total
-    rows, cols = confusion_matrix.shape
-    elements = (phi2 - ((cols-1)*(rows-1))/(total-1)).values
-    phi2corr = max({0, elements[0], elements[1]})
-    rcorr = rows - ((rows-1)**2)/(total-1)
-    kcorr = cols - ((cols-1)**2)/(total-1)
-    return np.sqrt(phi2corr / min(kcorr[0]-1, kcorr[1]-1, rcorr[0]-1, rcorr[1]-1))
+def cramers_v(x, y):
+    confusion_matrix = pd.crosstab(x, y)
+    chi2, _, _, _ = ss.chi2_contingency(confusion_matrix)
+    n = confusion_matrix.sum().sum()
+    phi2 = chi2 / n
+    r, k = confusion_matrix.shape
+    phi2corr = max(0, phi2 - ((k-1)*(r-1))/(n-1))
+    rcorr = r - ((r-1)**2)/(n-1)
+    kcorr = k - ((k-1)**2)/(n-1)
+    return np.sqrt(phi2corr / min((kcorr-1), (rcorr-1)))
 
+correlation_matrix = categ_data.apply(lambda x: categ_data.apply(lambda y: cramers_v(x, y)))
+plt.figure(figsize=(12, 10))
+sns.heatmap(correlation_matrix, annot=True, cmap="coolwarm")
+plt.show()
 
-categ_correlation = pd.DataFrame(data = np.transpose([categ_data.columns, np.repeat(None, len(categ_data.columns))]),
-                                 columns = ['features', 'correlation'])
-
-
-for i, variable in enumerate(categ_data.columns):
-    contingency_matrix = pd.crosstab(categ_data[variable],categ_data['target_categ'])
-    cramer_stat = cramers_v(contingency_matrix)
-    categ_correlation.iloc[i]['correlation'] = cramer_stat
-    
-
-print(categ_correlation)
