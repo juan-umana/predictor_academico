@@ -1,5 +1,5 @@
 # Predictor académico
-## Código fuente del predictor de éxito académico en estudiantes universitarios
+### Código fuente del predictor de éxito académico en estudiantes universitarios
 
 Producto de analítica de datos para universidades que quieran estudiar los factores por los cuales los estudiantes no culminan sus estudios en el tiempo predestinado. Esto, con el fin de tomar decisiones informadas respecto al acompañamiento brindado a los estudiantes y las políticas educativas que se implementan.  
 
@@ -95,7 +95,17 @@ estudiantes que lograron éxito académico.
 
 #### Cursos
 
+Los cursos más frecuentes (y su porcentaje respecto a toda la población) de los estudiantes con éxito académico fueron:
 
+- Nursing (12.4%)
+- Social Service (5.6%)
+- Journalism and Communication (4.4%)
+
+Los cursos más frecuentes (y su porcentaje respecto a toda la población) de los estudiantes sin éxito académico fueron:
+
+- Management (5.5%)
+- Nursing (4.9%)
+- Management (evening attendance) (4.3%)
 
 #### Matrícula
 
@@ -111,7 +121,17 @@ Al agrupar los datos por rendimiento académico se observa que la mayoría de es
 
 #### Tipo de aplicación
 
+Los tipos de aplicación más frecuentes (y su porcentaje respecto a toda la población) de los estudiantes con éxito académico fueron:
 
+- 1st phase : general contingent (24.0%)
+- 2nd phase : general contingent (10.3%)
+- Over 23 years old (5.2%)
+
+Los tipos de aplicación más frecuentes (y su porcentaje respecto a toda la población) de los estudiantes sin éxito académico fueron:
+
+- 1st phase : general contingent (14.6%)
+- Over 23 years old (12.6%)
+- 2nd phase : general contingent (9.4%)
 
 #### Edad al momento de inscripción
 
