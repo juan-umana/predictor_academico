@@ -5,66 +5,79 @@ from pgmpy.sampling import BayesianModelSampling
 from pgmpy.models import BayesianNetwork
 from pgmpy.factors.discrete import TabularCPD
 
-#%% Red bayesiana para diagnosticar cáncer de pulmón
+#%% Red bayesiana para predecir el éxito académico
 
 # Estructura de la red
-model_lung = BayesianNetwork([("asia","tub"),("tub","either"),("either","xray"),("either","dysp"),("bronc","dysp"),("lung","either"),("smoke","lung"),("smoke","bronc")])
+model_success = BayesianNetwork([("grade_1","grade_2"),("grade_2","success"),
+                              ("age","success"),
+                              ("inflation","success"),
+                              ("scholarship","success"),
+                              ("course","success"),
+                              ("tuition","success"),
+                              ("application","success")])
 
 # Importar librerias
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
 # Subir csv
-data = pd.read_csv('data_asia.csv')
-data = data.replace({'yes': 1, 'no': 0})
-data = data.drop('index', axis=1)
+data = pd.read_csv('data_model.csv')
 
 #%% Dividir datos en train y test
 X_train, X_test = train_test_split(data, test_size=0.2, random_state=42)
 
 #%% Emplear el módulo de ajuste de pgmpy para ajustar la CPDs del nuevo modelo
-emv_lung = MaximumLikelihoodEstimator(model = model_lung, data = X_train)
+emv_success = MaximumLikelihoodEstimator(model = model_success, data = X_train)
 
 # Obtener las CPDs ajustadas
-cpds = emv_lung.get_parameters()
+cpds = emv_success.get_parameters()
 for cpd in cpds:
     print(cpd)
 
 #%%
-cpdem_asia = emv_lung.estimate_cpd (node = "asia")
-print(cpdem_asia)
-cpdem_tub = emv_lung.estimate_cpd(node = "tub")
-print(cpdem_tub)
-cpdem_either =emv_lung.estimate_cpd(node = "either")
-print(cpdem_either)
-cpdem_xray = emv_lung.estimate_cpd (node = "xray")
-print(cpdem_xray)
-cpdem_dysp = emv_lung.estimate_cpd(node = "dysp")
-print(cpdem_dysp)
-cpdem_bronc = emv_lung.estimate_cpd(node = "bronc")
-print(cpdem_bronc)
-cpdem_lung = emv_lung.estimate_cpd(node = "lung")
-print(cpdem_lung)
-cpdem_smoke = emv_lung.estimate_cpd(node = "smoke")
-print(cpdem_smoke)
+cpdem_grade_1 = emv_success.estimate_cpd (node = "grade_1")
+print(cpdem_grade_1)
+cpdem_grade_2 = emv_success.estimate_cpd(node = "grade_2")
+print(cpdem_grade_2)
+cpdem_age =emv_success.estimate_cpd(node = "age")
+print(cpdem_age)
+cpdem_inflation = emv_success.estimate_cpd (node = "inflation")
+print(cpdem_inflation)
+cpdem_scholarship = emv_success.estimate_cpd(node = "scholarship")
+print(cpdem_scholarship)
+cpdem_course = emv_success.estimate_cpd(node = "course")
+print(cpdem_course)
+cpdem_tuition = emv_success.estimate_cpd(node = "tuition")
+print(cpdem_tuition)
+cpdem_application = emv_success.estimate_cpd(node = "application")
+print(cpdem_application)
 
 #%% Predecir para la variable de lung
 
 from pgmpy.inference import VariableElimination
 
 #Asociar las CPDs al modelo
-model_lung.add_cpds(cpdem_asia,cpdem_tub,cpdem_either,cpdem_xray,cpdem_dysp,cpdem_bronc,cpdem_lung,cpdem_smoke)
+model_success.add_cpds(cpdem_grade_1,
+                       cpdem_grade_2,
+                       cpdem_age,
+                       cpdem_inflation,
+                       cpdem_scholarship,
+                       cpdem_course,
+                       cpdem_tuition,
+                       cpdem_application)
 
 #Revisar que el modelo esté completo
-print(model_lung.check_model())
+print(model_success.check_model())
 
 #%%
 
 # Crear un objeto de inferencia
-inference = VariableElimination(model_lung)
+inference = VariableElimination(model_success)
 
 # Crear una lista para guardar las predicciones
 predictions = []
+
+## TODO from here
 
 for _, row in X_test.iterrows():
 
