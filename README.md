@@ -63,6 +63,9 @@ Variables categóricas:
 
 De acuerdo con las correlaciones en las variables contínuas se decidió tomar las siguientes variables para las siguientes etapas del modelo:
 
+![](data_exploration/correlation_heat_map_continous.png)
+![](data_exploration/correlation_heat_map_categorical.png)
+
 - units_i_semester_approved (positive correlation)
 - units_i_semester_grade (positive correlation)
 - course (positive correlation)
