@@ -4,6 +4,7 @@ from pgmpy.estimators import BayesianEstimator
 from pgmpy.sampling import BayesianModelSampling
 from pgmpy.models import BayesianNetwork
 from pgmpy.factors.discrete import TabularCPD
+import os
 
 #%% Red bayesiana para predecir el éxito académico
 
@@ -32,6 +33,7 @@ emv_success = MaximumLikelihoodEstimator(model = model_success, data = X_train)
 
 # Obtener las CPDs ajustadas
 cpds = emv_success.get_parameters()
+
 # for cpd in cpds: # No estoy seguro cómo interpretar las tablas
 #     print(cpd)
 
@@ -77,10 +79,11 @@ print(model_success.check_model())
 
 # Crear un objeto de inferencia
 inference = VariableElimination(model_success)
+# TODO Existen predicciones que arrojan NaN
 
 # Crear una lista para guardar las predicciones
 predictions = []
-breakpoint() # TODO Existen predicciones que arrojan NaN
+
 for _, row in X_test.iterrows():
 
     # Crear un diccionario de evidencias con los datos de cada fila en datos de prueba

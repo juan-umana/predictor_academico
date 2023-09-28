@@ -1,4 +1,4 @@
-#%%
+#%% Import libraries
 from ucimlrepo import fetch_ucirepo 
 import numpy as np
 import pandas as pd
@@ -7,6 +7,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import seaborn as sns; sns.set_theme()
 
+#%%
 # fetch dataset 
 predict_students_dropout_and_academic_success = fetch_ucirepo(id=697) 
   
@@ -93,7 +94,8 @@ contin_variables = ['application_order','previous_qualification_(grade)',
                          'curricular_units_2nd_sem_(without_evaluations)',
                          'unemployment_rate', 'inflation_rate', 'gdp']
 
-#%%
+#%% CONTINUOUS
+
 # application_order_dic = Application order (between 0 - first choice; and 9 last choice)
 # prev_qual_grade_dic = Grade of previous qualification (between 0 and 200)
 # admission_grade = Admission grade (between 0 and 200)
@@ -120,19 +122,15 @@ contin_data = contin_data.join(target_contin_df)
 target_column = 'target_contin'
 
 # Calculate the correlations
-correlations = contin_data.corr()
-plt.figure(figsize=(12, 10))
-sns.heatmap(correlations, annot=True, cmap="coolwarm")
-plt.show()
+contin_correlations = contin_data.corr()
 
-#%%
 # Sort correlations by absolute values with respect to the target column
-contin_correlation = correlations[target_column].sort_values(ascending=False)
+contin_correlation_sorted = contin_correlations[target_column].sort_values(ascending=False)
 
 print('Correlation results for continous data')
-print(contin_correlation)
+print(contin_correlation_sorted)
 
-#%%
+#%% CATEGORICAL
 
 ## For categorical variables: Selection of variables by Chi-square tests
 
@@ -157,8 +155,14 @@ def cramers_v(x, y):
     kcorr = k - ((k-1)**2)/(n-1)
     return np.sqrt(phi2corr / min((kcorr-1), (rcorr-1)))
 
-correlation_matrix = categ_data.apply(lambda x: categ_data.apply(lambda y: cramers_v(x, y)))
-plt.figure(figsize=(12, 10))
-sns.heatmap(correlation_matrix, annot=True, cmap="coolwarm")
-plt.show()
+categ_correlations = categ_data.apply(lambda x: categ_data.apply(lambda y: cramers_v(x, y)))
 
+#%% Make correlation plots
+
+def correlation_plots(correlation_matrix):  
+    fig, ax = plt.subplots(figsize=(12, 10))
+    sns.heatmap(correlation_matrix, annot=True, cmap="coolwarm", ax=ax)
+    return fig
+
+correlation_plots(contin_correlations)
+correlation_plots(categ_correlations)
