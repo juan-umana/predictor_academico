@@ -6,9 +6,7 @@ from dash import html
 import pandas as pd
 import dash
 import os
-from Model.model import inference
-
-print(inference)
+from model import inference
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
@@ -28,20 +26,22 @@ app.layout = html.Div(children=[
     html.Img(src=categ_img_path, style={'width': '50%', 'height': 'auto'}),
     html.Img(src=cont_img_path, style={'width': '50%', 'height': 'auto'}),
     html.Div(children='''
-        De acuerdo con los resultado obtenidos en el análisis descriptivo anterior, se seleccionaron las sigueintes variables como factores de riesgo importantes para predecir la necesidad de acompañamiento de un estudiante. 
-        A continuación, ingrese valores para las variables y así observar el comportamiento del estado estudiantil de los estudiantes.
+        De acuerdo con los resultado obtenidos en el análisis descriptivo anterior, se seleccionaron unos factores de riesgo importantes para predecir la necesidad de acompañamiento de un estudiante. 
+        A continuación, ingrese los datos correspondientes del estudiante del cual quiere observar su riesgo académico.
     '''),
-    html.Div(["Variable 1: ",
+    html.Div(["Tipo de aplicación: ",
               dcc.Input(id='var1', value='Ingrese un valor', type='text')]),
-    html.Div(["Variable 2: ",
+    html.Div(["Número de curso: ",
               dcc.Input(id='var2', value='Ingrese un valor', type='text')]),
-    html.Div(["Variable 3: ",
-              dcc.Input(id='var3', value='Ingrese un valor', type='text')]),
-    html.Div(["Variable 4: ",
-              dcc.Input(id='var4', value='Ingrese un valor', type='text')]),
-    html.Div(["Variable 5: ",
+    html.Div(["¿El estudiante se encuentra al día con la matricula?: ",
+              dcc.Input(id='var3', value='Si o No', type='text')]),
+    html.Div(["¿El estudiante tiene beca?: ",
+              dcc.Input(id='var4', value='Si o No', type='text')]),
+    html.Div(["Edad: ",
               dcc.Input(id='var5', value='Ingrese un valor', type='text')]),
-    html.Div(["Variable 6: ",
+    html.Div(["Nota del estudiante en el primer semestre: ",
+              dcc.Input(id='var6', value='Ingrese un valor', type='text')]),
+    html.Div(["Nota del estudiante en el segundo semestre: ",
               dcc.Input(id='var6', value='Ingrese un valor', type='text')]),
     html.Div(id='my-output'),
     ]
