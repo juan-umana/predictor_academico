@@ -5,6 +5,7 @@ from pgmpy.sampling import BayesianModelSampling
 from pgmpy.models import BayesianNetwork
 from pgmpy.factors.discrete import TabularCPD
 import os
+import numpy as np
 
 #%% Red bayesiana para predecir el éxito académico
 
@@ -26,7 +27,7 @@ from sklearn.model_selection import train_test_split
 data_model = pd.read_csv('data_model.csv')
 
 #%% Dividir datos en train y test
-X_train, X_test = train_test_split(data_model, test_size=0.2, random_state=42)
+X_train, X_test = train_test_split(data_model, test_size=0.2, stratify= data_model['success'], random_state=42)
 
 #%% Emplear el módulo de ajuste de pgmpy para ajustar la CPDs del nuevo modelo
 emv_success = MaximumLikelihoodEstimator(model = model_success, data = X_train)
@@ -91,9 +92,18 @@ for _, row in X_test.iterrows():
     
     # Realizar la inferencia para obtener la CPD de "success" dado la evidencia
     result = inference.query(variables=['success'], evidence=evidence)
-    
+    try:
     # Agregar la predicción a la lista de predicciones
-    predictions.append(int(result.values[1]))  # El índice 1 corresponde a 'success'
+        list_result = list(result.values)
+        max_val = list_result.index(max(result.values))
+        if max_val == 0:
+            predictions.append('Dropout')
+        elif max_val == 1:
+            predictions.append('Enrolled')
+        else:
+            predictions.append('Graduate')
+    except:
+        predictions.append('NaN')
 
 #%% Obtener metricas
 
@@ -110,8 +120,9 @@ print(f'Exactitud (Accuracy): {accuracy}')
 confusion = confusion_matrix(y_true, predictions)
 
 # Extraer los valores de Verdaderos positivos, falsos positivos, falsos negativos y verdaderos negativos.
-tn, fp, fn, tp = confusion.ravel()
-print(f'Verdaderos Positivos: {tp}')
-print(f'Falsos Positivos: {fp}')
-print(f'Verdaderos Negativos: {tn}')
-print(f'Falsos Negativos: {fn}')
+# Se entiende como positivo haberse graduado, y negativo seguir matrículado o desertar
+t_drop, drop_as_enr, drop_as_grad, enr_as_drop, t_enr, enr_as_grad, grad_as_drop, grad_as_enr, t_grad = confusion.ravel()
+print(f'Verdaderos Positivos: {sum({t_grad}) }')
+print(f'Falsos Positivos: {sum({drop_as_grad, enr_as_grad})}')
+print(f'Verdaderos Negativos: {sum({t_drop, drop_as_enr, enr_as_drop, t_enr})}')
+print(f'Falsos Negativos: {sum({grad_as_drop, grad_as_enr})}')
