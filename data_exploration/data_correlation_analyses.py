@@ -1,11 +1,12 @@
 #%% Import libraries
+import seaborn as sns; sns.set_theme()
+import plotly.express as px
 from ucimlrepo import fetch_ucirepo 
 import numpy as np
 import pandas as pd
 import scipy.stats as ss
 import seaborn as sns
 import matplotlib.pyplot as plt
-import seaborn as sns; sns.set_theme()
 
 #%%
 # fetch dataset 
@@ -134,14 +135,14 @@ print(contin_correlation_sorted)
 
 ## For categorical variables: Selection of variables by Chi-square tests
 
-# Target as continous variable
+# Target as categorical variable
 target_categ = origin_data['target'].apply(lambda x: 'Success' if x == 'Graduate' else 'Fail')
 target_categ_df = pd.DataFrame({'target_categ' : target_categ})
 
-# Continous predictors
+# Categorical predictors
 categ_data = origin_data[categ_variables]
 
-# Continous data
+# Categorical data
 categ_data = categ_data.join(target_categ_df)
 
 def cramers_v(x, y):
@@ -157,6 +158,10 @@ def cramers_v(x, y):
 
 categ_correlations = categ_data.apply(lambda x: categ_data.apply(lambda y: cramers_v(x, y)))
 
+#%% Export correlations
+contin_correlations.to_excel("continuos_correlations.xlsx")
+categ_correlations.to_excel("categorical_correlations.xlsx")
+
 #%% Make correlation plots
 
 def correlation_plots(correlation_matrix):  
@@ -164,5 +169,34 @@ def correlation_plots(correlation_matrix):
     sns.heatmap(correlation_matrix, annot=True, cmap="coolwarm", ax=ax)
     return fig
 
-correlation_plots(contin_correlations)
-correlation_plots(categ_correlations)
+#%%
+coolwarm_scale = [[0, 'blue'], [0.5, 'white'], [1, 'red']]
+
+def correlation_plots_dash(correlation_matrix):
+    fig = px.imshow(correlation_matrix,
+                    labels=dict(color="Correlation"),
+                    x=correlation_matrix.columns.tolist(),
+                    y=correlation_matrix.index.tolist(),
+                    color_continuous_scale=coolwarm_scale,
+                    zmin=-1, zmax=1)
+
+    # Para agregar las anotaciones de los valores, puedes seguir utilizando un enfoque similar al que usaste previamente
+    z = correlation_matrix.values
+    for i in range(z.shape[0]):
+        for j in range(z.shape[1]):
+            fig.add_annotation(dict(
+                x=j,
+                y=i,
+                xref='x',
+                yref='y',
+                text=str(round(z[i][j], 2)),
+                showarrow=False,
+                font=dict(size=10, color='white' if abs(z[i][j]) > 0.5 else 'black')
+            ))
+
+    fig.update_layout(title_text="Correlation Heatmap", xaxis_title="Variables", yaxis_title="Variables")
+
+    return fig
+
+correlation_plots_dash(contin_correlations)
+correlation_plots_dash(categ_correlations)
