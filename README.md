@@ -8,8 +8,9 @@ Producto de analítica de datos para universidades que quieran estudiar los fact
 ¿Cuáles variables pueden considerarse factores de riesgo para que un estudiante no tenga éxito académico en la universidad y cómo predecir la necesidad de acompañamiento de un estudiante a partir ellos?
 
 #### Autores
-[Daniela Ruiz](https://github.com/danielaruizl1)  
-[Juan D. Umaña](https://github.com/juan-umana)
+[Daniela Ruiz](https://github.com/danielaruizl1) (Formulación del modelo, creación del dashboard y creación del servidor)
+
+[Juan D. Umaña](https://github.com/juan-umana) (Exploración de datos, formulación y evaluación del modelo, reporte)
 
 ### Metodología
 
@@ -21,7 +22,7 @@ Posteriormente estos predictores son utilizados en una red bayesiana para parame
 
 Por último, el producto se ofrece como un tablero interactivo alojado en un servidor AWS para que usuarios puedan acceder al modelo de forma remota y evaluar las predicciones para sus estudiantes.
 
-### Resultados
+### Resultados - Exploración de datos
 
 #### Selección de variables
 
@@ -156,3 +157,21 @@ unidades aprovadas por aquellos estudiantes que lograron éxito académico.
 ![](data_viz/inflation_plot.png)
 
 La tasa de inflación en ambos grupos presentan distribuciones sin diferencias significativas
+
+### Resultados - Formulación del modelo
+
+Dada la potencial interacción entre las variables y su correlación con el desempeño del estudiante, decidimos que todas afectarían directamente la variable objetivo a excepción de las calificaciones obtenidas el primer y el segundo semestre, como se observa en la Figura. Esto debido a que esperamos que un buen desempeño en el primer periodo pueda ser un potencial predictor del segundo periodo, y ambos serán potenciales predictores del desempeño final. Además, la disposición de esta red permite que en los casos en los que se conozcan las calificaciones del segundo semestre del estudiante estás sean las únicas relevantes, ignorando así su desempeño el semestre anterior; pero en aquellos casos en donde no se conozcan las calificaciones del segundo semestre (o el estudiante aún no lo haya cursado), su desempeño en el primer periodo será suficiente para que la red realice una predicción.
+
+![](image_network.png)
+
+El desempeño del modelo completo genera una excatitud (accuracy) de 59.2%. Teniendo en cuenta que tiene una clasificación tripe (Desertar, Continuar matrículado, y Gradiarse), este desempeño proporciona una mejor predicción que una asignación aleatoria en donde cada categoría tiene 33.3% porciento de probabilidad de ocurrencia. La tabla a continuación presenta la matriz de confusión para el modelo.
+
+![](conf_matrix_image.png)
+
+### Resultados - Tablero (dashboard)
+
+El prototipo de Tablero (dashboard) presenta el producto desarrollado, su objetivo y alcance. Su forma de uso consiste en digitar los valores de las variables incluidas en el modelo y las personas usuarias tendrán como resultado el desenlace académico más probable para el estudiante
+
+![](dash1.png)
+![](dash2.png)
+![](dash3.png)
