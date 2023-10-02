@@ -79,16 +79,16 @@ De acuerdo con las correlaciones en las variables contínuas se decidió tomar l
 
 A continuación gráficos y análisis descriptivos de los predictores seleccionados:
 
-#### Unidades curriculares aprovadas en el primer y segundo semestre
+#### Unidades curriculares aprobadas en el primer y segundo semestre
 
 ![](data_viz/units_approved_1_plot.png)
 ![](data_viz/units_approved_2_plot.png)
 
 En ambos semestres las distribuciones son similares a través de ambos grupos, y
 se observa que existe una diferencia significativa entre el (mayor) número de
-unidades aprovadas por aquellos estudiantes que lograron éxito académico.
+unidades aprobadas por aquellos estudiantes que lograron éxito académico.
 
-#### Calificaciones de las unidades aprovadas en el primer y segundo semestre
+#### Calificaciones de las unidades aprobadas en el primer y segundo semestre
 
 ![](data_viz/units_grade_1_plot.png)
 ![](data_viz/units_grade_2_plot.png)
@@ -150,7 +150,7 @@ Existe una diferencia significativa entre las edades de los estudiantes con dist
 
 En ambos semestres las distribuciones son similares a través de ambos grupos, y
 se observa que existe una diferencia significativa entre el número de
-unidades aprovadas por aquellos estudiantes que lograron éxito académico.
+unidades aprobadas por aquellos estudiantes que lograron éxito académico.
 
 #### Tasa de inflación
 
