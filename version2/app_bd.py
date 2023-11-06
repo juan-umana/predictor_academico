@@ -7,7 +7,6 @@ from dotenv import load_dotenv # pip install python-dotenv
 import os
 import pandas as pd
 import matplotlib.pyplot as plt
-import seaborn as sns
 import plotly.express as px
 import plotly.graph_objects as go
 from model import inference
