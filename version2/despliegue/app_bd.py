@@ -102,6 +102,7 @@ app.layout = html.Div(
     html.Div(children='''
         De acuerdo con las correlaciones hayadas entre los factores y el éxito académico, se seleccionaron unos factores de riesgo
         importantes para predecir la necesidad de acompañamiento de un estudiante. Los cuales tienen las siguientes relaciones: '''),
+    html.Br(),
     html.Div(html.Img(src='/assets/Red.png', width='915px', height='300px'), style={'text-align': 'center'}),
     html.Div(children='''         
         A continuación, ingrese los datos correspondientes del estudiante del cual quiere observar su riesgo académico.
