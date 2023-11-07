@@ -28,7 +28,7 @@ model_success = BayesianNetwork([('application_mode', 'prev_qualification'), ('a
 data_model = pd.read_csv("C:/Users/jd.umana10/Documents/GitHub/predictor_academico_2/aprendizaje_estructura/data_model.csv")
 
 # Dividir datos en train y test
-X_train, X_test = train_test_split(data_model, test_size=0.2, stratify= data_model['target'], random_state=42)
+X_train, X_test = train_test_split(data_model, stratify= data_model['target'], random_state=42)
 
 # Emplear el módulo de ajuste de pgmpy para ajustar la CPDs del nuevo modelo
 emv_success = MaximumLikelihoodEstimator(model = model_success, data = X_train)
@@ -106,10 +106,11 @@ def make_predictions(inference):
 
         # Crear un diccionario de evidencias con los datos de cada fila en datos de prueba
         evidence = {variable: row[variable] for variable in row.index if variable!='target'}
-        breakpoint()
         # Realizar la inferencia para obtener la CPD de "success" dado la evidencia
         try:
             result = inference.query(variables=['target'], evidence=evidence)
+        except:
+            breakpoint()
         # Agregar la predicción a la lista de predicciones
             list_result = list(result.values)
             max_val = list_result.index(max(result.values))
@@ -119,8 +120,8 @@ def make_predictions(inference):
                 predictions.append('Enrolled')
             else:
                 predictions.append('Graduate')
-        except:
-            predictions.append('NaN')
+        
+         #   predictions.append('NaN')
 
     # Obtener el ground truth para comparar las predicciones
     y_true = X_test['target'].tolist()
