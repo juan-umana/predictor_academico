@@ -32,7 +32,7 @@ env_path=os.path.join("app.env")
 # load env 
 load_dotenv(dotenv_path=env_path)
 # extract env variables
-USER=os.getenv('USER')
+USER="postgres"
 PASSWORD=os.getenv('PASSWORD')
 HOST=os.getenv('HOST')
 PORT=os.getenv('PORT')
@@ -103,7 +103,7 @@ app.layout = html.Div(
         De acuerdo con las correlaciones hayadas entre los factores y el éxito académico, se seleccionaron unos factores de riesgo
         importantes para predecir la necesidad de acompañamiento de un estudiante. Los cuales tienen las siguientes relaciones: '''),
     html.Br(),
-    html.Div(html.Img(src='/assets/Red.png', width='915px', height='300px'), style={'text-align': 'center'}),
+    html.Div(html.Img(src='/assets/Red.png'), style={'text-align': 'center'}),
     html.Div(children='''         
         A continuación, ingrese los datos correspondientes del estudiante del cual quiere observar su riesgo académico.
     '''),
@@ -293,4 +293,4 @@ def update_prediction(val1, val2, val3, val4, val5, val6, val7, val8):
     return round(list_result[0],2), round(list_result[1],2), round(list_result[2],2)
 
 if __name__ == '__main__':
-    app.run_server(debug=False, port=8040)
+    app.run_server(debug=False, host="0.0.0.0", port=8020)
