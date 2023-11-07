@@ -360,4 +360,4 @@ def update_prediction(val1, val2, val3, val4, val5, val6, val7, val8, val9, val1
     return round(list_result[0],2), round(list_result[1],2), round(list_result[2],2)
 
 if __name__ == '__main__':
-    app.run_server(debug=False, port=5432)
+    app.run_server(debug=False, port=8040)
