@@ -14,21 +14,15 @@ import numpy as np
 #%% Red bayesiana para predecir el éxito académico
 
 # Estructura de la red
-model_success = BayesianNetwork([('application_mode', 'prev_qualification'), ('application_mode', 'international'),
-                                 ('application_order', 'displaced'), ('course', 'units_1_enrolled'), ('course', 'attendance'),
-                                 ('attendance', 'marital_status'), ('attendance', 'application_mode'), ('attendance', 'application_order'),
-                                 ('attendance', 'displaced'), ('displaced', 'application_mode'), ('displaced', 'marital_status'),
-                                 ('debtor', 'tuition'), ('tuition', 'units_1_grade'), ('tuition', 'target'), ('gender', 'tuition'),
-                                 ('international', 'nationality'), ('units_1_credited', 'units_2_credited'), ('units_1_enrolled', 'units_2_enrolled'),
+model_success = BayesianNetwork([('debtor', 'tuition'), ('tuition', 'units_1_grade'), ('tuition', 'target'), ('gender', 'tuition'),
                                  ('units_1_approved', 'units_2_approved'), ('units_1_grade', 'units_2_grade'), ('units_1_grade', 'units_1_approved'),
-                                 ('units_2_approved', 'target'), ('units_2_approved', 'course'), ('units_2_approved', 'scholarship'),
-                                 ('inflation_rate', 'gdp'), ('gdp', 'unemployment_rate'), ('gdp', 'debtor')])
+                                 ('units_2_approved', 'target'), ('units_2_approved', 'scholarship')])
 
 # Subir csv
 data_model = pd.read_csv("C:/Users/jd.umana10/Documents/GitHub/predictor_academico_2/aprendizaje_estructura/data_model.csv")
 
 # Dividir datos en train y test
-X_train, X_test = train_test_split(data_model, test_size=0.2, stratify= data_model['target'], random_state=42)
+X_train, X_test = train_test_split(data_model, stratify= data_model['target'], random_state=42)
 
 # Emplear el módulo de ajuste de pgmpy para ajustar la CPDs del nuevo modelo
 emv_success = MaximumLikelihoodEstimator(model = model_success, data = X_train)
@@ -37,57 +31,25 @@ emv_success = MaximumLikelihoodEstimator(model = model_success, data = X_train)
 cpds = emv_success.get_parameters()
 
 print("Calculando cpds...")
-cpdem_marital_status = emv_success.estimate_cpd (node = 'marital_status')
-cpdem_application_mode = emv_success.estimate_cpd (node = 'application_mode')
-cpdem_application_order = emv_success.estimate_cpd (node = 'application_order')
-cpdem_course = emv_success.estimate_cpd (node = 'course')
-cpdem_attendance = emv_success.estimate_cpd (node = 'attendance')
-cpdem_prev_qualification = emv_success.estimate_cpd (node = 'prev_qualification')
-cpdem_nationality = emv_success.estimate_cpd (node = 'nationality')
-cpdem_displaced = emv_success.estimate_cpd (node = 'displaced')
 cpdem_debtor = emv_success.estimate_cpd (node = 'debtor')
 cpdem_tuition = emv_success.estimate_cpd (node = 'tuition')
 cpdem_gender = emv_success.estimate_cpd (node = 'gender')
 cpdem_scholarship = emv_success.estimate_cpd (node = 'scholarship')
-cpdem_international = emv_success.estimate_cpd (node = 'international')
-cpdem_units_1_credited = emv_success.estimate_cpd (node = 'units_1_credited')
-cpdem_units_1_enrolled = emv_success.estimate_cpd (node = 'units_1_enrolled')
 cpdem_units_1_approved = emv_success.estimate_cpd (node = 'units_1_approved')
 cpdem_units_1_grade = emv_success.estimate_cpd (node = 'units_1_grade')
-cpdem_units_2_credited = emv_success.estimate_cpd (node = 'units_2_credited')
-cpdem_units_2_enrolled = emv_success.estimate_cpd (node = 'units_2_enrolled')
 cpdem_units_2_approved = emv_success.estimate_cpd (node = 'units_2_approved')
 cpdem_units_2_grade = emv_success.estimate_cpd (node = 'units_2_grade')
-cpdem_unemployment_rate = emv_success.estimate_cpd (node = 'unemployment_rate')
-cpdem_inflation_rate = emv_success.estimate_cpd (node = 'inflation_rate')
-cpdem_gdp = emv_success.estimate_cpd (node = 'gdp')
 cpdem_target = emv_success.estimate_cpd (node = 'target')
 
 #Asociar las CPDs al modelo
-model_success.add_cpds(cpdem_marital_status,
-                       cpdem_application_mode,
-                       cpdem_application_order,
-                       cpdem_course,
-                       cpdem_attendance,
-                       cpdem_prev_qualification,
-                       cpdem_nationality,
-                       cpdem_displaced,
-                       cpdem_debtor,
+model_success.add_cpds(cpdem_debtor,
                        cpdem_tuition,
                        cpdem_gender,
                        cpdem_scholarship,
-                       cpdem_international,
-                       cpdem_units_1_credited,
-                       cpdem_units_1_enrolled,
                        cpdem_units_1_approved,
                        cpdem_units_1_grade,
-                       cpdem_units_2_credited,
-                       cpdem_units_2_enrolled,
                        cpdem_units_2_approved,
                        cpdem_units_2_grade,
-                       cpdem_unemployment_rate,
-                       cpdem_inflation_rate,
-                       cpdem_gdp,
                        cpdem_target)
 
 #Revisar que el modelo esté completo
@@ -106,7 +68,6 @@ def make_predictions(inference):
 
         # Crear un diccionario de evidencias con los datos de cada fila en datos de prueba
         evidence = {variable: row[variable] for variable in row.index if variable!='target'}
-        breakpoint()
         # Realizar la inferencia para obtener la CPD de "success" dado la evidencia
         try:
             result = inference.query(variables=['target'], evidence=evidence)
