@@ -9,8 +9,17 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import plotly.express as px
 import plotly.graph_objects as go
-from model import inference
+from pgmpy.inference import VariableElimination
+import pickle
 
+# Read model from PKL file 
+filename='model.pkl'
+file = open(filename, 'rb')
+model_success = pickle.load(file)
+file.close()
+
+# Infering the posterior probability
+infer = VariableElimination(model_success)
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
@@ -63,6 +72,11 @@ corr_fig.update_layout(xaxis_tickangle=-90, plot_bgcolor='white', paper_bgcolor=
 
 cursor = engine.cursor()
 
+content = [
+    html.B("Desertor: "), html.Span(id='Desertor'), html.Br(),
+    html.B("Matriculado: "), html.Span(id='Matriculado'), html.Br(),
+    html.B("Graduado: "), html.Span(id='Graduado')
+]
 
 app.layout = html.Div(
     [
@@ -87,27 +101,86 @@ app.layout = html.Div(
     dcc.Graph(id='bar-exito'),
     html.Div(children='''
         De acuerdo con las correlaciones hayadas entre los factores y el éxito académico, se seleccionaron unos factores de riesgo
-        importantes para predecir la necesidad de acompañamiento de un estudiante. 
+        importantes para predecir la necesidad de acompañamiento de un estudiante. Los cuales tienen las siguientes relaciones: '''),
+    html.Div(html.Img(src='/assets/Red.png', width='915px', height='300px'), style={'text-align': 'center'}),
+    html.Div(children='''         
         A continuación, ingrese los datos correspondientes del estudiante del cual quiere observar su riesgo académico.
     '''),
-    html.Div(["Tipo de aplicación: ",
-              dcc.Input(id='var1', value='', type='text')]),
-    html.Div(["Número de curso: ",
-              dcc.Input(id='var2', value='', type='text')]),
-    html.Div(["¿El estudiante se encuentra al día con la matricula?: ",
-              dcc.Input(id='var3', value='', type='text')]),
-    html.Div(["¿El estudiante tiene beca?: ",
-              dcc.Input(id='var4', value='', type='text')]),
-    html.Div(["Edad: ",
-              dcc.Input(id='var5', value='', type='text')]),
-    html.Div(["Nota del estudiante en el primer semestre: ",
-              dcc.Input(id='var6', value='', type='text')]),
-    html.Div(["Nota del estudiante en el segundo semestre: ",
-              dcc.Input(id='var7', value='', type='text')]),
-    html.Div(["Tasa de inflación: ",
-              dcc.Input(id='var8', value='', type='text')]), 
-    html.Div(children='''La predicción del estado estudiantil es:'''), 
-    html.H6(html.B(id='my-output')),
+    html.Div(["Estado marital: ",
+              dcc.Dropdown(id='var1', value=1, 
+                           options=[1,2,3,4,5,6])]),
+    html.Div(["Modo de aplicación: ",
+              dcc.Dropdown(id='var2', value=44, 
+                           options=[1,2,5,7,10,16,17,18,26,27,39,42,43,44,51,53,57])]),
+    html.Div(["Orden de aplicación: ",
+              dcc.Dropdown(id='var3', value=1, 
+                           options=[0,1,2,3,4,5,6,7,8,9])]),
+    html.Div(["Curso: ",
+              dcc.Dropdown(id='var4', value=9003, 
+                           options=[33,171,8014,9003,9070,9085,9119,9130,9147,9238,9254,9500,9556,9670,9773,9853,9991])]),
+    html.Div(["Asistencia: ",
+              dcc.Dropdown(id='var5', value=1, 
+                           options=[0,1])]),
+    html.Div(["Nivel educativo: ",
+              dcc.Dropdown(id='var6', value=39, 
+                           options=[1,2,3,4,5,6,9,10,11,12,14,15,19,38,39,40,42,43])]),
+    html.Div(["Nacionalidad: ",
+              dcc.Dropdown(id='var7', value=1, 
+                           options=[1,2,6,11,13,14,17,21,22,24,25,26,32,41,62,100,101,103,105,108,109])]),
+    html.Div(["Desplazado: ",
+              dcc.Dropdown(id='var8', value=1, 
+                           options=[0,1])]),
+    html.Div(["Deudor: ",
+              dcc.Dropdown(id='var9', value=0, 
+                           options=[0,1])]),
+    html.Div(["Matrícula: ",
+              dcc.Dropdown(id='var10', value=1, 
+                           options=[0,1])]),
+    html.Div(["Género: ",
+              dcc.Dropdown(id='var11', value=1, 
+                           options=[0,1])]),
+    html.Div(["Beca: ",
+              dcc.Dropdown(id='var12', value=0, 
+                           options=[0,1])]),     
+    html.Div(["Internacional: ",
+              dcc.Dropdown(id='var13', value=0, 
+                           options=[0,1])]),     
+    html.Div(["Materias acreditadas 1 semestre: ",
+              dcc.Dropdown(id='var14', value=0, 
+                           options=[ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20])]),
+    html.Div(["Materias matriculadas 1 semestre: ",
+              dcc.Dropdown(id='var15', value=6, 
+                           options=[ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 23, 26])]),      
+    html.Div(["Materias aprobadas 1 semestre: ",
+              dcc.Dropdown(id='var16', value=6, 
+                           options=[ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 23, 26])]),
+    html.Div(["Promedio 1 semestre: ",
+              dcc.Dropdown(id='var17', value=14, 
+                           options=[ 0, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19])]),
+    html.Div(["Materias acreditadas 2 semestre: ",
+              dcc.Dropdown(id='var18', value=0, 
+                           options=[ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 18, 19])]),
+    html.Div(["Materias matriculadas 2 semestre: ",
+              dcc.Dropdown(id='var19', value=6, 
+                           options=[ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 23])]),      
+    html.Div(["Materias aprobadas 2 semestre: ",
+              dcc.Dropdown(id='var20', value=6, 
+                           options=[ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 16, 17, 18, 19, 20])]),
+    html.Div(["Promedio 2 semestre: ",
+              dcc.Dropdown(id='var21', value=15, 
+                           options=[ 0, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19])]),             
+    html.Div(["Tasa de desempleo: ",
+              dcc.Dropdown(id='var22', value=12, 
+                           options=[8,9,11,12,13,14,16])]),
+    html.Div(["Tasa de inflación: ",    
+              dcc.Dropdown(id='var23', value=1, 
+                           options=[-1,0,1,3,4])]),
+    html.Div(["PIB: ",
+              dcc.Dropdown(id='var24', value=2,      
+                           options=[-4,-3,-2,-1,0,1,2,3,4])]),                                                                                      
+    html.Br(),
+    html.H6(children='''La predicción del estado estudiantil es:'''), 
+    html.Div(children=content),
     ]
 )
 
@@ -236,7 +309,9 @@ def update_graphs(curso):
     return fig_promedios, fig_exito
 
 @app.callback(
-    Output(component_id='my-output', component_property='children'),
+    Output(component_id='Desertor', component_property='children'),
+    Output(component_id='Matriculado', component_property='children'),
+    Output(component_id='Graduado', component_property='children'),
     [
         Input(component_id='var1', component_property='value'),
         Input(component_id='var2', component_property='value'),
@@ -245,32 +320,44 @@ def update_graphs(curso):
         Input(component_id='var5', component_property='value'),
         Input(component_id='var6', component_property='value'),
         Input(component_id='var7', component_property='value'),
-        Input(component_id='var8', component_property='value')
+        Input(component_id='var8', component_property='value'),
+        Input(component_id='var9', component_property='value'),
+        Input(component_id='var10', component_property='value'),
+        Input(component_id='var11', component_property='value'),
+        Input(component_id='var12', component_property='value'),
+        Input(component_id='var13', component_property='value'),
+        Input(component_id='var14', component_property='value'),
+        Input(component_id='var15', component_property='value'),
+        Input(component_id='var16', component_property='value'),
+        Input(component_id='var17', component_property='value'),
+        Input(component_id='var18', component_property='value'),
+        Input(component_id='var19', component_property='value'),
+        Input(component_id='var20', component_property='value'),
+        Input(component_id='var21', component_property='value'),
+        Input(component_id='var22', component_property='value'),
+        Input(component_id='var23', component_property='value'),
+        Input(component_id='var24', component_property='value')
     ]
 )
         
-def update_prediction(val1, val2, val3, val4, val5, val6, val7, val8):
+def update_prediction(val1, val2, val3, val4, val5, val6, val7, val8, val9, val10, val11, val12, val13, val14, val15, val16, val17, val18, val19, val20, val21, val22, val23, val24):
     # Predicción del estado estudiantil
-    values = [val1, val2, val3, val4, val5, val6, val7, val8]
-    labels = ['application', 'course', 'tuition', 'scholarship', 'age', 'grade_1', 'grade_2', 'inflation']
+    values = [val1, val2, val3, val4, val5, val6, val7, val8, val9, val10, val11, val12, val13, val14, val15, val16, val17, val18, val19, val20, val21, val22, val23, val24]
+    labels = ['marital_status', 'application_mode', 'application_order',
+            'course', 'attendance', 'prev_qualification', 'nationality',
+            'displaced', 'debtor', 'tuition', 'gender', 'scholarship',
+            'international', 'units_1_credited', 'units_1_enrolled',
+            'units_1_approved', 'units_1_grade', 'units_2_credited',
+            'units_2_enrolled', 'units_2_approved', 'units_2_grade',
+            'unemployment_rate', 'inflation_rate', 'gdp']
     evidence = {}
     for i in range(len(values)):
         if values[i] != '':
             evidence[labels[i]]=int(values[i])
-    result = inference.query(variables=['success'], evidence=evidence)
-    try:
-        list_result = list(result.values)
-        max_val = list_result.index(max(result.values))
-        if max_val == 0:
-            prediction = 'Deserción'
-        elif max_val == 1:
-            prediction = 'Matriculado'
-        else:
-            prediction = 'Graduado'
-    except:
-        prediction = 'No se puede determinar'
+    result = infer.query(variables=['target'], evidence=evidence)
+    list_result = list(result.values)
 
-    return prediction
+    return round(list_result[0],2), round(list_result[1],2), round(list_result[2],2)
 
 if __name__ == '__main__':
     app.run_server(debug=False)
